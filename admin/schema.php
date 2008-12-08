@@ -586,3 +586,15 @@ $upgrade[] = Array( 'RenameColumnSQL', Array( db_get_table( 'mantis_sponsorship_
 $upgrade[] = Array( 'DropColumnSQL', Array( db_get_table( 'mantis_sponsorship_table' ), "date_submitted" ) );
 $upgrade[] = Array( 'RenameColumnSQL', Array( db_get_table( 'mantis_sponsorship_table' ), "date_submitted_int", "date_submitted", "date_submitted_int		I  UNSIGNED     NOTNULL DEFAULT '1' " ) );
 
+# first version of voting
+$upgrade[] = Array( 'CreateTableSQL', Array( db_get_table( 'mantis_bug_votes_table' ), "
+	issue_id		I		UNSIGNED NOTNULL PRIMARY DEFAULT '0',
+	user_id			I		UNSIGNED NOTNULL PRIMARY DEFAULT '0',
+	weight			I		NOTNULL DEFAULT '1'
+	", Array( 'mysql' => 'TYPE=MyISAM', 'pgsql' => 'WITHOUT OIDS' ) ) );
+$upgrade[] = Array( 'AddColumnSQL', Array( db_get_table( 'mantis_bug_table' ), "
+	votes_positive		I		UNSIGNED NOTNULL DEFAULT '0',
+	votes_negative		I		UNSIGNED NOTNULL DEFAULT '0',
+	votes_num_voters	I		UNSIGNED NOTNULL DEFAULT '0'
+	" ) );
+$upgrade[] = Array('CreateIndexSQL',Array('idx_votes_num_voters',db_get_table('mantis_bug_table'),'votes_num_voters'));

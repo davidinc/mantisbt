@@ -172,6 +172,8 @@ define( 'BUG_PAID_SPONSORSHIP', 24 );
 define( 'TAG_ATTACHED', 25 );
 define( 'TAG_DETACHED', 26 );
 define( 'TAG_RENAMED', 27 );
+define( 'BUGVOTE_ADDED', 28 );
+define( 'BUGVOTE_DELETED', 29 );
 define( 'PLUGIN_HISTORY', 100 );
 
 # bug revisions
@@ -361,6 +363,13 @@ define( 'ERROR_SESSION_NOT_VALID', 2702 );
 
 # ERROR_FORM_*
 define( 'ERROR_FORM_TOKEN_INVALID', 2800 );
+
+# ERROR_VOTING_*
+define( 'ERROR_VOTING_NOT_ENABLED', 2900 );
+define( 'ERROR_VOTING_OVER_LIMIT', 2901 );
+
+# voting 
+define('VOTES_UNLIMITED_VOTES', -1);
 
 # Status Legend Position
 define( 'STATUS_LEGEND_POSITION_TOP', 1 );

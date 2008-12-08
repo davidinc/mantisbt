@@ -335,6 +335,14 @@ function helper_get_columns_to_view( $p_columns_target = COLUMNS_TARGET_VIEW_PAG
 		$t_keys_to_remove[] = 'sponsorship_total';
 	}
 
+	$t_enable_voting = config_get( 'voting_enabled' );
+	if ( OFF == $t_enable_voting ) {
+		$t_keys_to_remove[] = 'votes_total';
+		$t_keys_to_remove[] = 'votes_num_voters';
+		$t_keys_to_remove[] = 'votes_positive';
+		$t_keys_to_remove[] = 'votes_negative';
+	}
+
 	if( $p_columns_target == COLUMNS_TARGET_CSV_PAGE || $p_columns_target == COLUMNS_TARGET_EXCEL_PAGE || OFF == config_get( 'show_attachment_indicator' ) ) {
 		$t_keys_to_remove[] = 'attachment';
 	}
