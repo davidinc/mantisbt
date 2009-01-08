@@ -3586,7 +3586,7 @@
 	
 	# default number of votes allowed per user
 	# votes can be set for all user levels as an integer 
-	# set to VOTES_UNLIMITED_VOTES to get unlimited votes
+	# set to Mantis_Vote::UNLIMITED to get unlimited votes
 	$g_voting_default_num_votes = 10; 
 
 	# You can set votes by user type
@@ -3600,7 +3600,6 @@
 	# the maximum weight a user at a given level may use in a single vote
 	# max vote weight can be an integer
 	$g_voting_max_vote_weight = 5;
-
 	# or set by user type, 
 	# eg: even though a reporter may have 10 votes, they may only use 
 	# up to weight 5 in a single vote
