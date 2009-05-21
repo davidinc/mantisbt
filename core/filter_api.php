@@ -2834,7 +2834,7 @@ function filter_draw_selection_area2( $p_page_number, $p_for_screen = true, $p_e
 				<td colspan="3">&nbsp;</td>
 			<?php } ?>
 
-			<td class="small-caption" valign="top" id="tag_string_filter_target" colspan="5">
+			<td class="small-caption" valign="top" id="tag_string_filter_target" colspan="4">
 				<?php
 					$t_tag_string = $t_filter[FILTER_PROPERTY_TAG_STRING];
 		if( $t_filter[FILTER_PROPERTY_TAG_SELECT] != 0 && tag_exists( $t_filter[FILTER_PROPERTY_TAG_SELECT] ) ) {
