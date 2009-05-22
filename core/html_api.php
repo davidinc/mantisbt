@@ -67,7 +67,6 @@ require_once( $t_core_dir . 'authentication_api.php' );
 require_once( $t_core_dir . 'user_api.php' );
 require_once( $t_core_dir . 'rss_api.php' );
 require_once( $t_core_dir . 'wiki_api.php' );
-require_once( $t_core_dir . 'vote_api.php' );
 require_once( $t_core_dir . 'php_api.php' );
 
 $g_rss_feed_url = null;

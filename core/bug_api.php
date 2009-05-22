@@ -58,10 +58,6 @@ require_once( $t_core_dir . 'twitter_api.php' );
  */
 require_once( $t_core_dir . 'tag_api.php' );
 /**
- * requires vote_api
- */
-require_once( $t_core_dir . 'vote_api.php' );
-/**
  * requires relationship_api
  */
 require_once( $t_core_dir . 'relationship_api.php' );
