@@ -35,6 +35,7 @@
 define ( 'BASE_PATH' , realpath( dirname(__FILE__) ) );
 $mantisLibrary = BASE_PATH . DIRECTORY_SEPARATOR . 'library';
 $mantisCore = BASE_PATH . DIRECTORY_SEPARATOR . 'core';
+$mantisApplication = BASE_PATH . DIRECTORY_SEPARATOR . 'application';
 
 /*
  * Prepend the application/ and tests/ directories to the
@@ -43,6 +44,7 @@ $mantisCore = BASE_PATH . DIRECTORY_SEPARATOR . 'core';
 $path = array(
     $mantisCore,
     $mantisLibrary,
+	$mantisApplication,
     get_include_path()
     );
 set_include_path( implode( PATH_SEPARATOR, $path ) );
@@ -50,7 +52,7 @@ set_include_path( implode( PATH_SEPARATOR, $path ) );
 /*
  * Unset global variables that are no longer needed.
  */
-unset($mantisRoot, $mantisLibrary, $mantisCore, $path);
+unset($mantisRoot, $mantisLibrary, $mantisCore, $mantisApplication, $path);
 
 	# Include compatibility file before anything else
 	require_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'php_api.php' );
@@ -120,6 +122,11 @@ unset($mantisRoot, $mantisLibrary, $mantisCore, $path);
 			return;
 		}
 
+		// New style classes, move this up as their number grows
+		if ( strpos( $className, '_' ) ) {
+			$classPath = str_replace( '_' , '/' , $className );
+			include_once ( $classPath . '.php' );
+		}
 	}
 
 	if ( ($t_output = ob_get_contents()) != '') {
