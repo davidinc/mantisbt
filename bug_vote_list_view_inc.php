@@ -23,12 +23,10 @@
 
 # This include file prints out the list of users that have voted for the current
 # bug.	$f_bug_id must be set to the bug id
-$t_core_path = config_get( 'core_path' );
-require_once( $t_core_path . 'vote_api.php' );
-require_once( $t_core_path . 'collapse_api.php' );
+require_once( 'collapse_api.php' );
 
 
-$t_voting_enabled = vote_is_enabled();
+$t_voting_enabled = Mantis_Vote::is_enabled();
 $t_current_user_id = auth_get_current_user_id();
 
 #
@@ -37,11 +35,11 @@ $t_current_user_id = auth_get_current_user_id();
 
 if ($t_voting_enabled) {
 	
-	$t_votes = vote_get_issue_votes( $f_bug_id );
+	$t_votes = Mantis_Vote::get_issue_votes( $f_bug_id );
 
 	$t_votes_exist = count( $t_votes ) > 0;
-	$t_can_view_vote_details = vote_can_view_vote_details($f_bug_id, $t_current_user_id);
-	$t_can_vote = vote_can_vote($f_bug_id, $t_current_user_id);
+	$t_can_view_vote_details = Mantis_Vote::can_view_details($f_bug_id, $t_current_user_id);
+	$t_can_vote = Mantis_Vote::can_vote($f_bug_id, $t_current_user_id);
 
 	$t_show_votes = $t_votes_exist || $t_can_vote;
 	
@@ -59,12 +57,12 @@ if ($t_voting_enabled) {
 	$t_voting_weight_default = config_get( 'voting_weight_default' );
 	
 	$t_issue_project = bug_get_field( $f_bug_id, 'project_id');
-	$t_max_votes = vote_max_votes( $t_current_user_id );
-	$t_used_votes = vote_used_votes( $t_issue_project );
-	$t_unlimited = (VOTES_UNLIMITED_VOTES == $t_max_votes);
+	$t_max_votes = Mantis_Vote::max_votes( $t_current_user_id );
+	$t_used_votes = Mantis_Vote::used_votes( $t_issue_project );
+	$t_unlimited = ( Mantis_Vote::UNLIMITED == $t_max_votes );
 	
-	$t_available_votes = vote_available_votes( $t_issue_project, $t_current_user_id );
-	$t_voting_max_vote_weight = vote_max_weight( $t_issue_project, $t_current_user_id );
+	$t_available_votes = Mantis_Vote::available_votes( $t_issue_project, $t_current_user_id );
+	$t_voting_max_vote_weight = Mantis_Vote::max_weight( $t_issue_project, $t_current_user_id );
 	
 	$t_voting_per_project = config_get( 'voting_per_project' );
 	
@@ -92,23 +90,21 @@ if ($t_voting_enabled) {
 		<td>
 		<?php
 		if ( $t_can_vote ) {
-			if (vote_exists($f_bug_id, $t_current_user_id) ) { #show 'remove my vote' button
-									
-				if (bug_is_resolved($f_bug_id)  )
-				{		
-					echo lang_get('voted_and_resolved');
+			if ( Mantis_Vote::exists( $f_bug_id, $t_current_user_id ) ) {
+				// show 'remove my vote' button
+				html_button( 'bug_vote_delete.php',
+						lang_get( 'vote_delete_button' ),
+						array( 'bug_id' => $f_bug_id, 'action' => 'DELETE' ) );
+
+				if ( ! $t_unlimited ) {
+					// when voting is limited, adds some status dependent info
+					if ( bug_is_resolved( $f_bug_id ) ) {		
+						echo lang_get( 'voted_and_resolved' );
+					}
+					else if ( bug_get_field( $f_bug_id, 'status' ) == ASSIGNED ) {
+						echo lang_get( 'voted_and_assigned' );
+					}
 				}
-				else if(bug_get_field($f_bug_id,'status') == ASSIGNED)
-				{
-					echo lang_get('voted_and_assigned');
-				}
-				else
-				{
-					html_button( 'bug_vote_delete.php',
-									 lang_get( 'vote_delete_button' ),
-									 array( 'bug_id' => $f_bug_id, 'action' => 'DELETE' ) );
-				}
-			
 			}
 			else {  # show 'add vote' button
 			?>
@@ -136,12 +132,10 @@ if ($t_voting_enabled) {
 			} 
 			?> <?php echo lang_get('votes_used')?>, 
 			<?php
-			if ($t_available_votes == VOTES_UNLIMITED_VOTES)
-			{
+			if ( $t_available_votes === Mantis_Vote::UNLIMITED ) {
 				echo lang_get('vote_unlimited');
 			}
-			else
-			{
+			else {
 				echo $t_available_votes;
 			}		 
 			?> 
@@ -149,7 +143,7 @@ if ($t_voting_enabled) {
 			<input type="hidden" name="bug_id" value="<?php echo $t_bug_id; ?>" />
 			</form>		
 		<? 
-			} #end vote_exists
+			} #end Mantis_Vote::exists
 		} #end can_vote 
 		?>
 		</td>
@@ -178,7 +172,7 @@ if ($t_voting_enabled) {
 		</td>
 	</tr>
 	<?php
-		} #end view_vote_details 
+		} #end view_Mantis_Vote::details 
 	} #end votes_exist
 	?>
 </table>
