@@ -46,6 +46,16 @@
 	$u_email = user_get_email( $u_id, $u_username );
 
 	html_page_top();
+
+$t_votes = Mantis_Vote::get_user_votes();
+# get all information for issues ready for display to user
+$t_votes_info = array();
+foreach($t_votes as $t_vote) {
+	$t_issue = bug_get($t_vote['issue_id']);
+	$t_project_name = project_get_name($t_issue->project_id);
+	$t_votes_info[] = array('vote'=>$t_vote, 'issue'=>$t_issue, 'project_name'=>$t_project_name);
+}
+
 ?>
 
 <br />
@@ -117,5 +127,83 @@
 
 <br />
 
+<div>
+<table class="buglist">
+	<caption>
+		<?php echo lang_get( 'own_voted' ) ?>
+	</caption>
+	<thead>
+	<tr>
+		<th><?php echo lang_get( 'email_bug' ) ?></th>
+		<th><?php echo lang_get( 'vote_weight' ) ?></th>
+		<th><?php echo lang_get( 'vote_num_voters' ) ?></th>
+		<th><?php echo lang_get( 'vote_balance' ) ?></th>
+		<th><?php echo lang_get( 'email_project' ) ?></th>
+		<th><?php echo lang_get( 'email_status' ) ?></th>
+		<th><?php echo lang_get( 'email_summary' ) ?></th>
+	</tr>
+	</thead>
+	<?php
+	if (is_array($t_votes_info) && count($t_votes_info)>0){
+	?>
+	<?php foreach($t_votes_info as $t_vote_info){ ?>
+	<tr bgcolor="<?php echo get_status_color( $t_vote_info['issue']->status )?>">
+		<td>
+			<a href="<?php echo string_get_bug_view_url( $t_vote_info['vote']['issue_id'] );?>"><?php echo bug_format_id( $t_vote_info['vote']['issue_id'] );?></a>
+		</td>
+		<td class="right">
+			<?php echo ($t_vote_info['vote']['weight']>0)?('+'.$t_vote_info['vote']['weight']):$t_vote_info['vote']['weight'] ?>
+		</td>
+		<td class="right">
+			<?php echo $t_vote_info['issue']->votes_num_voters ?>
+		</td>
+		<td class="right">
+			<?php
+			$t_balance = $t_vote_info['issue']->votes_positive - $t_vote_info['issue']->votes_negative;
+			echo ($t_balance>0)?('+'.$t_balance):$t_balance; 
+			?>
+		</td>
+		<td class="center">
+			<?php echo $t_vote_info['project_name']; ?>
+		</td>
+		<td class="center">
+			<?php echo string_attribute( get_enum_element( 'status', $t_vote_info['issue']->status ) ); ?>
+		</td>
+		<td>
+			<?php
+			echo string_display_line( $t_vote_info['issue']->summary );
+			if ( VS_PRIVATE == $t_vote_info['issue']->view_state ) {
+				printf( ' <img src="%s" alt="(%s)" title="%s" />', $t_icon_path . 'protected.gif', lang_get( 'private' ), lang_get( 'private' ) );
+			}
+			?>
+		</td>
+	</tr>
+	<?php } // endforeach
+	} else { ?>
+	<tr><td colspan="7" class="center"><?php echo lang_get('no_votes') ?></td></tr>
+	<?php } ?>
+	<tfoot>
+		<tr>
+			<td colspan="2">
+				<?php echo lang_get( 'votes_used' ) ?>: <?php echo Mantis_Vote::used_votes() ?>
+			</td>
+			<td colspan="5">
+				<?php echo lang_get( 'votes_remain' ) ?>:
+				<?php 
+				$t_votes_available = Mantis_Vote::available_votes();
+				if ( $t_votes_available === Mantis_Vote::UNLIMITED )
+				{
+					echo lang_get('vote_unlimited');
+				}
+				else
+				{
+					echo $t_votes_available;
+				}
+				?> 
+			</td>
+		</tr>
+	</tfoot>
+</table>
+</div>
 <?php
 	html_page_bottom( __FILE__ );
