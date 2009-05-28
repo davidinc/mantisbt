@@ -703,7 +703,7 @@ function relationship_get_summary_html( $p_bug_id ) {
 		if( relationship_can_resolve_bug( $p_bug_id ) == false ) {
 			$t_summary .= '<tr class="row-2"><td colspan="' . ( 5 + $t_show_project ) . '"><b>' . lang_get( 'relationship_warning_blocking_bugs_not_resolved' ) . '</b></td></tr>';
 		}
-		$t_summary = '<table border="0" width="100%" cellpadding="0" cellspacing="1">' . $t_summary . '</table>';
+		$t_summary = '<table class="width100 hide" cellpadding="0" cellspacing="1">' . $t_summary . '</table>';
 	}
 
 	return $t_summary;

@@ -454,7 +454,7 @@ function html_login_info() {
 	$t_now = date( config_get( 'complete_date_format' ) );
 	$t_realname = current_user_get_field( 'realname' );
 
-	echo '<table class="hide">';
+	echo '<table class="width100 hide">';
 	echo '<tr>';
 	echo '<td class="login-info-left">';
 	if( current_user_is_anonymous() ) {
@@ -554,7 +554,7 @@ function html_footer( $p_file ) {
 	echo "\t", '<br />', "\n";
 	echo "\t", '<hr size="1" />', "\n";
 
-	echo '<table border="0" width="100%" cellspacing="0" cellpadding="0"><tr valign="top"><td>';
+	echo '<table class="width100 hide" cellspacing="0" cellpadding="0"><tr valign="top"><td>';
 	if( ON == config_get( 'show_version' ) ) {
 		$t_version_suffix = config_get_global( 'version_suffix' );
 		echo "\t", '<span class="timer"><a href="http://www.mantisbt.org/" title="Free Web Based Bug Tracker">MantisBT ', MANTIS_VERSION, ( $t_version_suffix ? " $t_version_suffix" : '' ), '</a>', '[<a href="http://www.mantisbt.org/"  title="Free Web Based Bug Tracker" target="_blank">^</a>]</span>', "\n";
@@ -565,8 +565,10 @@ function html_footer( $p_file ) {
 	if( !is_page_name( 'login_page.php' ) && !current_user_is_anonymous() ) {
 		echo "\t", '<address><a href="mailto:', config_get( 'webmaster_email' ), '">', config_get( 'webmaster_email' ), '</a></address>', "\n";
 	}
+	echo '</table>', "\n";
 
 	event_signal( 'EVENT_LAYOUT_PAGE_FOOTER' );
+
 
 	# print timings
 	if( ON == config_get( 'show_timer' ) ) {
@@ -592,7 +594,7 @@ function html_footer( $p_file ) {
 			}
 
 			echo "\t", $t_unique_queries, ' ', lang_get( 'unique_queries_executed' ), '<br />', "\n";
-			echo "\t", '<table>', "\n";
+			echo "\t", '<table class="hide">', "\n";
 			$t_total = 0;
 			for( $i = 0;$i < $t_count;$i++ ) {
 				$t_time = $g_queries_array[$i][1];
@@ -1503,7 +1505,7 @@ function html_buttons_view_bug_page( $p_bug_id ) {
 	$t_status = bug_get_field( $p_bug_id, 'status' );
 	$t_readonly = bug_is_readonly( $p_bug_id );
 
-	echo '<table><tr class="vcenter">';
+	echo '<table class="hide"><tr class="vcenter">';
 	if( !$t_readonly ) {
 		# UPDATE button
 		echo '<td class="center">';
