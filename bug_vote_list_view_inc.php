@@ -166,7 +166,7 @@ if ($t_voting_enabled) {
 		<td>
 		<?php	foreach($t_votes as $userVote){ ?>
 			<div class="userVote">
-				<?php echo user_get_name($userVote['user_id']) ?> <?php echo ($userVote['weight']>=1)?'+'.$userVote['weight']:$userVote['weight'] ?>
+				<?php echo print_user($userVote['user_id']) ?> <?php echo ($userVote['weight']>=1)?'+'.$userVote['weight']:$userVote['weight'] ?>
 			</div>
 		<?php } ?>
 		</td>
