@@ -467,7 +467,7 @@ Class Mantis_Vote {
             FROM $t_issue_table
             WHERE weight < 0 AND issue_id=" . db_param();
         $t_negative_result = db_query_bound( $query, Array( $c_issue_id ) );
-        $t_bug->votes_negative = (int)$t_negative_result->fields['voteWeight'];
+        $t_bug->votes_negative = abs( (int)$t_negative_result->fields['voteWeight'] ); 
 
         bug_update( $p_issue_id, $t_bug, false, true );
     }
